@@ -22,7 +22,7 @@ pod 'MessageInputManager'
 
 ## Author
 
-kuchhadiyaa, akshay@atominc.in
+Akshay Kuchhadiya, akshay@atominc.in
 
 ## License
 

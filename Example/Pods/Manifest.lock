@@ -1,0 +1,16 @@
+PODS:
+  - MessageInputManager (0.1.0)
+
+DEPENDENCIES:
+  - MessageInputManager (from `../`)
+
+EXTERNAL SOURCES:
+  MessageInputManager:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MessageInputManager: f42a340f523ca6241557b623ff575a6fd8fd1fe1
+
+PODFILE CHECKSUM: 09c236c3f3ab4ea95860dbc1abb9480d2ab28ec7
+
+COCOAPODS: 1.5.3

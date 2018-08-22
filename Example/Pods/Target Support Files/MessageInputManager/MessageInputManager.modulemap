@@ -1,0 +1,6 @@
+framework module MessageInputManager {
+  umbrella header "MessageInputManager-umbrella.h"
+
+  export *
+  module * { export * }
+}
