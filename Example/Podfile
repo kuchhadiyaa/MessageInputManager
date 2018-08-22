@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'MessageInputManager_Example' do
+  pod 'MessageInputManager', :path => '../'
+
+  target 'MessageInputManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
