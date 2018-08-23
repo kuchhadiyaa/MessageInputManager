@@ -11,7 +11,7 @@ Pod::Spec.new do |s|
   s.swift_version = '4.0'
 	s.ios.deployment_target  = '9.0'
 	s.platform     		= :ios, "9.0"
-	
+
 	#Source and Licence
   s.homepage         = 'https://github.com/kuchhadiyaa/MessageInputManager'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
@@ -19,14 +19,14 @@ Pod::Spec.new do |s|
   s.author           = { 'Akshay Kuchhadiya' => 'akshay@atominc.in' }
   s.source           = { :git => 'https://github.com/kuchhadiyaa/MessageInputManager.git', :tag => s.version.to_s }
 	s.source_files = 'MessageInputManager/Classes/**/*'
-	
+
 	#Social media links
   s.social_media_url = 'https://twitter.com/anonymous_akkii'
-  s.social_media_url = 'https://in.linkedin.com/in/akshay18'
-  
-  # s.resource_bundles = {
-  #   'MessageInputManager' => ['MessageInputManager/Assets/*.png']
-  # }
+#s.social_media_url = 'https://in.linkedin.com/in/akshay18'
+
+	s.resource_bundles = {
+	 'MessageInputManager' => ['MessageInputManager/Assets/**/*.*']
+	}
 
 	#Framework dependancy
   # s.public_header_files = 'Pod/Classes/**/*.h'
