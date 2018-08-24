@@ -20,7 +20,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Screenshots
 
-<img width="50%" height="50%" src="https://github.com/kuchhadiyaa/MessageInputManager/Screenshots/SS1.png" /><img width="50%" height="50%" src="https://github.com/kuchhadiyaa/MessageInputManager/Screenshots/SS2.png" />
+<img width="50%" height="50%" src="https://raw.githubusercontent.com/kuchhadiyaa/MessageInputManager/master/Screenshots/SS1.PNG" /<img width="50%" height="50%" src="https://raw.githubusercontent.com/kuchhadiyaa/MessageInputManager/master/Screenshots/SS2.PNG" />
 
 ## Installation
 
