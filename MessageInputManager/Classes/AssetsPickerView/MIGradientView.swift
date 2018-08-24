@@ -13,6 +13,7 @@ class MIGradientView: UIView {
 	// MARK: - Life cycle methods
 	
 	override class var layerClass:Swift.AnyClass {
+		//Return Gradient layer as UIVies default layer.
 		return CAGradientLayer.classForCoder()
 	}
 }

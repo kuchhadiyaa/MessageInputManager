@@ -41,58 +41,9 @@ class MIAssetPickerView: UIView {
 		super.init(coder: aDecoder)
 		initiateComponents()
 	}
-	
-	// MARK: - Initialization methods
-	
-	private final func initiateComponents(){
-		assetsManager.delegate = self
-		initializeAndConfigureViews()
-	}
-	
-	private final func initializeAndConfigureViews(){
-		autoresizingMask = .flexibleHeight
-		backgroundColor = UIColor.groupTableViewBackground
-
-		initializeAndConfigureCollection()
-	}
-	private final func initializeAndConfigureCollection(){
-		let flowLayout = UICollectionViewFlowLayout()
-		flowLayout.scrollDirection = .horizontal
-		flowLayout.sectionInset = UIEdgeInsetsMake(1, 5, 1, 5)
-		flowLayout.minimumInteritemSpacing = 2
-		flowLayout.minimumLineSpacing = 2
-		let assetsListCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
-		assetsListCollectionView.translatesAutoresizingMaskIntoConstraints = false
-		assetsListCollectionView.backgroundColor = UIColor.clear
-		assetsListCollectionView.dataSource = self
-		assetsListCollectionView.delegate = self
-		if #available(iOS 10.0, *) {
-			assetsListCollectionView.prefetchDataSource = self
-		}
-		assetsListCollectionView.bounces = true
-		assetsListCollectionView.showsVerticalScrollIndicator = false
-		assetsListCollectionView.showsHorizontalScrollIndicator = false
-		assetsListCollectionView.alwaysBounceHorizontal = true
-		assetsListCollectionView.alwaysBounceVertical = false
-		assetsListCollectionView.allowsMultipleSelection = true
-		addSubview(assetsListCollectionView)
-		self.assetsListCollectionView = assetsListCollectionView
-		
-		//Configure collection view
-		
-		assetsListCollectionView.register(StaticCollectionViewCell.self, forCellWithReuseIdentifier: StaticCollectionViewCell.reuseIdentifier)
-		assetsListCollectionView.register(AssetCollectionViewCell.self, forCellWithReuseIdentifier: AssetCollectionViewCell.reuseIdentifier)
-		assetsListCollectionView.register(PhotoCaptureCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCaptureCollectionViewCell.reuseIdentifier)
-		
-		//Add layout
-		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[assetsListCollectionView]", options: .directionMask, metrics: nil, views: ["assetsListCollectionView":assetsListCollectionView]))
-		addConstraint(assetsListCollectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -5))
-		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[assetsListCollectionView]-0-|", options: .directionLeftToRight, metrics: nil, views: ["assetsListCollectionView":assetsListCollectionView]))
-
-	}
 }
 
-// MARK: - Accessor methods
+// MARK: - Helper methods
 
 extension MIAssetPickerView {
 	
@@ -117,6 +68,20 @@ extension MIAssetPickerView {
 		if let index = assetsManager.index(of: asset) {
 			assetsListCollectionView?.deselectItem(at: IndexPath(row: index + 3, section: 0), animated: true)
 		}
+	}
+	
+	/// Helper to retirve assets for given indexPaths.
+	///
+	/// - Parameter indexPaths: Index path at which to retrive asset.
+	/// - Returns: Assets for given indexPaths
+	private final func getAssets(at indexPaths:[IndexPath]) -> [PHAsset] {
+		var assets = [PHAsset]()
+		for indexPath in indexPaths {
+			if indexPath.row > 2,let asset = assetsManager.asset(at: indexPath.row - 3) {
+				assets.append(asset)
+			}
+		}
+		return assets
 	}
 
 	/// Clear all existing selection.
@@ -155,6 +120,51 @@ extension MIAssetPickerView {
 			}
 		}
 	}
+	
+	/// Process media in legacy way.
+	///
+	/// - Parameter info: Media dictionary
+	private final func processMedia(with info:[String:Any]){
+		var info = info
+		//If type movie then get thumb of image and set in dict as origional image key.
+		var assetImage = UIImage()
+		var assetType:AssetType = .photo
+		let assetURL = info[UIImagePickerControllerMediaURL] as? URL
+		var duration = 0.0
+		if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeMovie as String || (info[UIImagePickerControllerMediaType] as? String) == kUTTypeVideo as String {
+			assetType = .video
+			let asset = AVURLAsset(url: assetURL!, options: nil)
+			let generateImg = AVAssetImageGenerator(asset: asset)
+			generateImg.appliesPreferredTrackTransform = true
+			duration = CMTimeGetSeconds(asset.duration)
+			let midpoint: CMTime = CMTimeMakeWithSeconds(duration / 2.0, 600)
+			if let refImg = try? generateImg.copyCGImage(at: midpoint, actualTime: nil){
+				assetImage = UIImage(cgImage: refImg)
+			}else{
+				assetImage = UIImage()
+			}
+		} else if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeImage as String {
+			if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+				assetImage = image
+			}else{
+				assetImage = UIImage()
+			}
+			assetType = .photo
+		}else if #available(iOS 9.1, *) {
+			if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeLivePhoto as String {
+				if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+					assetImage = image
+				}else{
+					assetImage = UIImage()
+				}
+				assetType = .livePhoto
+			}
+		}
+		let assetInput = MIAsset(image: assetImage, type: assetType)
+		assetInput.assetURL = assetURL
+		assetInput.duration = duration
+		delegate?.didSelectMedia(assetInput)
+	}
 
 }
 
@@ -163,7 +173,8 @@ extension MIAssetPickerView {
 extension MIAssetPickerView : UICollectionViewDataSource {
 	
 	func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-		return assetsManager.numberOfAssets()
+		//All assets + 3 cell for custom camera,image picker camera and photolibrary.
+		return assetsManager.numberOfAssets() + 3
 	}
 	
 	func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -196,6 +207,10 @@ extension MIAssetPickerView : UICollectionViewDataSource {
 // MARK: - Collection view delegate methods
 
 extension MIAssetPickerView : UICollectionViewDelegate {
+	
+	func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+		return true
+	}
 	func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 		guard indexPath.row > 2 else {
 			guard indexPath.row != 2 else {return}
@@ -245,6 +260,8 @@ extension MIAssetPickerView : UICollectionViewDelegateFlowLayout{
 			return assetCellSize
 		}
 	}
+	
+	
 }
 
 // MARK: - Collection view datasource prefetching methods
@@ -257,20 +274,6 @@ extension MIAssetPickerView : UICollectionViewDataSourcePrefetching {
 	func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
 		let assets = getAssets(at: indexPaths)
 		assetsManager.stopCachingImages(for: assets, for: assetCellSize)
-	}
-	
-	/// Helper to retirve assets for given indexPaths.
-	///
-	/// - Parameter indexPaths: Index path at which to retrive asset.
-	/// - Returns: Assets for given indexPaths
-	private final func getAssets(at indexPaths:[IndexPath]) -> [PHAsset] {
-		var assets = [PHAsset]()
-		for indexPath in indexPaths {
-			if indexPath.row > 2,let asset = assetsManager.asset(at: indexPath.row - 3) {
-				assets.append(asset)
-			}
-		}
-		return assets
 	}
 }
 
@@ -330,49 +333,74 @@ extension MIAssetPickerView : UINavigationControllerDelegate, UIImagePickerContr
 	func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
 		picker.dismiss(animated: true)
 	}
+}
+
+// MARK: - Initialization methods
+
+extension MIAssetPickerView {
 	
-	/// Process media in legacy way.
-	///
-	/// - Parameter info: Media dictionary
-	private final func processMedia(with info:[String:Any]){
-		var info = info
-		//If type movie then get thumb of image and set in dict as origional image key.
-		var assetImage = UIImage()
-		var assetType:AssetType = .photo
-		let assetURL = info[UIImagePickerControllerMediaURL] as? URL
-		var duration = 0.0
-		if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeMovie as String || (info[UIImagePickerControllerMediaType] as? String) == kUTTypeVideo as String {
-			assetType = .video
-			let asset = AVURLAsset(url: assetURL!, options: nil)
-			let generateImg = AVAssetImageGenerator(asset: asset)
-			generateImg.appliesPreferredTrackTransform = true
-			duration = CMTimeGetSeconds(asset.duration)
-			let midpoint: CMTime = CMTimeMakeWithSeconds(duration / 2.0, 600)
-			if let refImg = try? generateImg.copyCGImage(at: midpoint, actualTime: nil){
-				assetImage = UIImage(cgImage: refImg)
-			}else{
-				assetImage = UIImage()
-			}
-		} else if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeImage as String {
-			if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-				assetImage = image
-			}else{
-				assetImage = UIImage()
-			}
-			assetType = .photo
-		}else if #available(iOS 9.1, *) {
-			if (info[UIImagePickerControllerMediaType] as? String) == kUTTypeLivePhoto as String {
-				if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-					assetImage = image
-				}else{
-					assetImage = UIImage()
-				}
-				assetType = .livePhoto
-			}
+	/// Initialize UI and setup initial values
+	private final func initiateComponents(){
+		assetsManager.delegate = self
+		initializeAndConfigureViews()
+	}
+	
+	/// Setup subviews
+	private final func initializeAndConfigureViews(){
+		autoresizingMask = .flexibleHeight
+		backgroundColor = UIColor.groupTableViewBackground
+		
+		initializeAndConfigureCollection()
+	}
+	
+	/// Initialize collection view and add as subview.
+	private final func initializeAndConfigureCollection(){
+		let flowLayout = AssetInputFlowLayout()
+		flowLayout.scrollDirection = .horizontal
+		flowLayout.sectionInset = UIEdgeInsetsMake(1, 5, 1, 5)
+		flowLayout.minimumInteritemSpacing = 2
+		flowLayout.minimumLineSpacing = 2
+		let assetsListCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
+		assetsListCollectionView.translatesAutoresizingMaskIntoConstraints = false
+		assetsListCollectionView.backgroundColor = UIColor.clear
+		assetsListCollectionView.dataSource = self
+		assetsListCollectionView.delegate = self
+		if #available(iOS 10.0, *) {
+			assetsListCollectionView.prefetchDataSource = self
 		}
-		let assetInput = MIAsset(image: assetImage, type: assetType)
-		assetInput.assetURL = assetURL
-		assetInput.duration = duration
-		delegate?.didSelectMedia(assetInput)
+		assetsListCollectionView.bounces = true
+		assetsListCollectionView.showsVerticalScrollIndicator = false
+		assetsListCollectionView.showsHorizontalScrollIndicator = false
+		assetsListCollectionView.alwaysBounceHorizontal = true
+		assetsListCollectionView.alwaysBounceVertical = false
+		assetsListCollectionView.allowsMultipleSelection = true
+		addSubview(assetsListCollectionView)
+		self.assetsListCollectionView = assetsListCollectionView
+		
+		//Configure collection view
+		
+		assetsListCollectionView.register(StaticCollectionViewCell.self, forCellWithReuseIdentifier: StaticCollectionViewCell.reuseIdentifier)
+		assetsListCollectionView.register(AssetCollectionViewCell.self, forCellWithReuseIdentifier: AssetCollectionViewCell.reuseIdentifier)
+		assetsListCollectionView.register(PhotoCaptureCollectionViewCell.self, forCellWithReuseIdentifier: PhotoCaptureCollectionViewCell.reuseIdentifier)
+		
+		//Add layout
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[assetsListCollectionView]", options: .directionMask, metrics: nil, views: ["assetsListCollectionView":assetsListCollectionView]))
+		addConstraint(assetsListCollectionView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor, constant: -5))
+		addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[assetsListCollectionView]-0-|", options: .directionLeftToRight, metrics: nil, views: ["assetsListCollectionView":assetsListCollectionView]))
+		
 	}
 }
+
+// MARK: - Custom flow layout
+
+class AssetInputFlowLayout : UICollectionViewFlowLayout{
+	override func invalidationContext(forBoundsChange newBounds: CGRect) -> UICollectionViewLayoutInvalidationContext {
+		return UICollectionViewFlowLayoutInvalidationContext()
+	}
+	override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+		/// Return true when height changes as Height will affect cell size and hence re-calculation of layout.
+		guard let oldBounds = collectionView?.bounds else {return true}
+		return oldBounds.height != newBounds.height
+	}
+}
+

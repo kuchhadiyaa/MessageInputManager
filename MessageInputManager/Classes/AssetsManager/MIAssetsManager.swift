@@ -21,12 +21,17 @@ class MIAssetsManager:NSObject {
 	
 	// MARK: - Internal variables
 	
+	/// Image cache manager
 	fileprivate var imageManager = PHCachingImageManager()
+	/// All assets in Asset collection.
 	fileprivate var assetsArray: [PHAsset] = []
+	/// Fetch result for asetcollection
 	fileprivate var fetchResult: PHFetchResult<PHAsset>?
+	/// Assetcollection for camera roll album
 	fileprivate var cameraRollAssetCollection: PHAssetCollection?
-	fileprivate var fetchResultCollection: PHFetchResult<PHAssetCollection>?
+	/// Represents if already fetched albums of not.
 	fileprivate var isAlbumFetched = false
+	/// Current authorization statu
 	fileprivate var authorizationStatus = PHPhotoLibrary.authorizationStatus()
 	
 	// MARK: - Life cycle methods
@@ -138,8 +143,8 @@ extension MIAssetsManager {
 	fileprivate final func fetchAlbum() {
 		if !isAlbumFetched {
 			isAlbumFetched = true
-			fetchResultCollection = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
-			guard let assetCollection = fetchResultCollection?.firstObject else {return}
+			let fetchResultCollection = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: nil)
+			guard let assetCollection = fetchResultCollection.firstObject else {return}
 			cameraRollAssetCollection = assetCollection
 			
 			let fetchOptions = PHFetchOptions()
@@ -156,7 +161,6 @@ extension MIAssetsManager {
 		imageManager.stopCachingImagesForAllAssets()
 		assetsArray.removeAll()
 		fetchResult = nil
-		fetchResultCollection = nil
 		cameraRollAssetCollection = nil
 		isAlbumFetched = false
 	}

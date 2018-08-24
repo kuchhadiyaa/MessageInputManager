@@ -27,9 +27,6 @@
 		46A775EA212EC8700051D692 /* MIMessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A775D6212EC8700051D692 /* MIMessageInputView.swift */; };
 		46A775EB212EC8700051D692 /* MIMessageInputViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A775D7212EC8700051D692 /* MIMessageInputViewDelegate.swift */; };
 		46A775EC212EC8700051D692 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46A775D9212EC8700051D692 /* Media.xcassets */; };
-		46A775F2212EC8B00051D692 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 46A775EF212EC8B00051D692 /* LICENSE */; };
-		46A775F3212EC8B00051D692 /* MessageInputManager.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 46A775F0212EC8B00051D692 /* MessageInputManager.podspec */; };
-		46A775F4212EC8B00051D692 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 46A775F1212EC8B00051D692 /* README.md */; };
 		46A775FD212ECA420051D692 /* MessageInputManager-prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 46A775F7212ECA420051D692 /* MessageInputManager-prefix.pch */; };
 		46A77600212ECA420051D692 /* MessageInputManager-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 46A775FA212ECA420051D692 /* MessageInputManager-umbrella.h */; };
 /* End PBXBuildFile section */
@@ -197,8 +194,8 @@
 		7DB346D0F39D3F0E887471402A8071AB = {
 			isa = PBXGroup;
 			children = (
-				46A775EE212EC8930051D692 /* Deployment */,
 				83C36D17A0657231C33B5D98746A74D3 /* Development Pods */,
+				46A775EE212EC8930051D692 /* Deployment */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
 				DE21175F3D661D74D053E747C4696964 /* Products */,
 			);
@@ -207,8 +204,8 @@
 		83C36D17A0657231C33B5D98746A74D3 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				46A775F5212EC9460051D692 /* Supporting Files */,
 				46A775BE212EC8700051D692 /* MessageInputManager */,
+				46A775F5212EC9460051D692 /* Supporting Files */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
@@ -298,10 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46A775F2212EC8B00051D692 /* LICENSE in Resources */,
 				46A775EC212EC8700051D692 /* Media.xcassets in Resources */,
-				46A775F4212EC8B00051D692 /* README.md in Resources */,
-				46A775F3212EC8B00051D692 /* MessageInputManager.podspec in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -355,6 +349,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.atominc.MessageInputManager;
 				PRODUCT_MODULE_NAME = MessageInputManager;
 				PRODUCT_NAME = MessageInputManager;
 				SDKROOT = iphoneos;
@@ -509,6 +504,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.atominc.MessageInputManager;
 				PRODUCT_MODULE_NAME = MessageInputManager;
 				PRODUCT_NAME = MessageInputManager;
 				SDKROOT = iphoneos;

@@ -26,6 +26,12 @@ final class MIPhotoCaptureProcessor:NSObject{
 	
     // MARK: - Photo capture methods
     
+    /// This method will capture photo using current session. Provide settings for photo and orientation and Handler will be invoked when operation finishes with photo or error.
+    ///
+    /// - Parameters:
+    ///   - captureSettings: Photo capture settings
+    ///   - orientation: Orientation of photo
+    ///   - completionHandler: Handler will be invoked at capture end.
     func capturePhoto(with captureSettings:AVCapturePhotoSettings,orientation:AVCaptureVideoOrientation,completionHandler:@escaping PhotoCaptureCompletionHandler) {
         photoOutput.connection(with: AVMediaType.video)?.videoOrientation = orientation
         captureCompletionHanlder = completionHandler
@@ -34,6 +40,9 @@ final class MIPhotoCaptureProcessor:NSObject{
     
     // MARK: - Helper
     
+    /// Configure session to be used by CapturePhotoOutput. without calling this method capturePhoto will result in error.
+    ///
+    /// - Parameter session: Session to be configured 
     func configureSession(_ session:AVCaptureSession) {
         if session.canAddOutput(photoOutput) {
             session.addOutput(photoOutput)

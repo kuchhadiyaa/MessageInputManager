@@ -8,14 +8,19 @@
 import CoreLocation
 import ImageIO
 
+/// Class representing exif dictionary wrapper.
 class MIExifContainer {
 	
 	// MARK: - Variables
 	
+	/// All metadata container.
 	fileprivate let imageMetadata:NSMutableDictionary
 	
 	// MARK: - Life cycle methods
 	
+	/// Initialize with metadata
+	///
+	/// - Parameter metaDataDictionary: Metadata
 	init(with metaDataDictionary:NSMutableDictionary) {
 		imageMetadata = metaDataDictionary
 	}
@@ -26,9 +31,14 @@ class MIExifContainer {
 
 extension MIExifContainer {
 
+	/// Returns GPS metadata dictionary
 	var gpsDictionary:NSMutableDictionary {
 		return dictionaryFor(key: kCGImagePropertyGPSDictionary as String)
 	}
+	
+	/// Add GPS metadata dictionary. this will replace existing if any with new dictionary and location data.
+	///
+	/// - Parameter location: Location
 	func add(location:CLLocation) {
 		let latitude = location.coordinate.latitude
 		let longitude = location.coordinate.longitude
@@ -68,10 +78,17 @@ extension MIExifContainer {
 
 extension MIExifContainer {
 	
+	/// Return metadata
+	///
+	/// - Returns: Dictionary of metadata
 	func getMetadata() -> NSDictionary {
 		return imageMetadata
 	}
 	
+	/// Return metadata dictionary for given metadata key. if for given key metadata is not exist this will create one and return empty dictionary.
+	///
+	/// - Parameter key: Key for which metadata dictionary required.
+	/// - Returns: Metadata for given key.
 	func dictionaryFor(key:String) -> NSMutableDictionary{
 		guard let dictionary = imageMetadata[key] as? NSMutableDictionary else {
 			let dictionary = NSMutableDictionary()
@@ -80,10 +97,15 @@ extension MIExifContainer {
 		}
 		return dictionary
 	}
+	
+	/// Converts given data into UTC format string.
+	///
+	/// - Parameter date: Date to be converted
+	/// - Returns: String from date in UTC format.
 	func getUTCFormated(date:Date) ->String {
-		//TODO: Date formatter
-		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "yyyy:MM:dd HH:mm:ss"
 		return dateFormatter.string(from: date)
 	}
 }
+
+fileprivate let dateFormatter = DateFormatter()

@@ -12,18 +12,26 @@ public class MIMessageInputView: UIView {
 
 	// MARK: - Variables
 	
-	weak var delegate:MIMessageInputViewDelegate?
-	var textMessageLength = 1000
+	public weak var delegate:MIMessageInputViewDelegate?
+	public var textMessageLength = 1000
+	public var inputPlaceholder = "Message" {
+		didSet{
+			placeholderLabel.text = inputPlaceholder
+		}
+	}
+
+	fileprivate var assetInputButton: MIAssetInputButton = MIAssetInputButton()
+	fileprivate var sendButton = UIButton()
+
+	fileprivate var assetInputCollectionView: UICollectionView?
+	fileprivate var assetInputView: UIView = UIView()
+
+	fileprivate var placeholderLabel = UILabel()
+	fileprivate var messageInputTextView = MITextMessageInputTextView()
 	
-	var assetInputButton: MIAssetInputButton = MIAssetInputButton()
-	var sendButton = UIButton()
-	
-	var messageInputTextView = MITextMessageInputTextView()
-	var assetInputCollectionView: UICollectionView?
-	var assetInputView: UIView = UIView()
-	var textInputToSuperViewConstraint: NSLayoutConstraint?
-	var textInputToAssetInputConstraint: NSLayoutConstraint?
-	var assetInputHeightConstraint: NSLayoutConstraint?
+	fileprivate var textInputToSuperViewConstraint: NSLayoutConstraint?
+	fileprivate var textInputToAssetInputConstraint: NSLayoutConstraint?
+	fileprivate var assetInputHeightConstraint: NSLayoutConstraint?
 	
 	fileprivate var livePhotoOffForAssets = NSMutableArray()
 	fileprivate var assetsInput = NSMutableArray()
@@ -186,6 +194,7 @@ extension MIMessageInputView {
 		assetInputCollectionView?.reloadData()
 		assetPickerView.clearAllSelections()
 		updateAssetInputView()
+		updatePlaceholderLabel()
 	}
 }
 
@@ -202,6 +211,7 @@ extension MIMessageInputView: UITextViewDelegate {
 			}
 		}
 		updateSendButton()
+		updatePlaceholderLabel()
 	}
 	
 	public func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -218,12 +228,14 @@ extension MIMessageInputView: UITextViewDelegate {
 		assetInputButton.isSelected = false
 		return true
 	}
+	
 }
 
 // MARK: - Helper method
 
 extension MIMessageInputView {
 	
+	/// Update Send button
 	private final func updateSendButton(){
 		if assetsInput.count > 0 || messageInputTextView.text != ""{
 			sendButton.isEnabled = true;
@@ -231,6 +243,8 @@ extension MIMessageInputView {
 			sendButton.isEnabled = false;
 		}
 	}
+	
+	/// Update asset input visiblity
 	private final func updateAssetInputView(){
 		let hideAssetInputView = assetsInput.count == 0
 		if assetInputView.isHidden != hideAssetInputView {
@@ -263,6 +277,10 @@ extension MIMessageInputView {
 		updateSendButton()
 	}
 
+	/// Update visiblity of Placeholder label
+	private final func updatePlaceholderLabel(){
+		placeholderLabel.isHidden = messageInputTextView.text != ""
+	}
 }
 
 // MARK: - UI Helper methods
@@ -305,6 +323,7 @@ extension MIMessageInputView{
 		initializeMessageInputTextView()
 		initializeSendButton()
 		inputContainerView.addSubview(assetInputView)
+		inputContainerView.addSubview(placeholderLabel)
 		inputContainerView.addSubview(messageInputTextView)
 		inputContainerView.addSubview(sendButton)
 		
@@ -316,10 +335,15 @@ extension MIMessageInputView{
 		textInputToAssetInputConstraint = NSLayoutConstraint(item: messageInputTextView, attribute: .top, relatedBy: .equal, toItem: assetInputView, attribute: .bottom, multiplier: 1, constant: 0)
 		inputContainerView.addConstraint(textInputToSuperViewConstraint!)
 		
-		inputContainerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[sendButton]-2-|", options: .directionMask, metrics: nil, views: ["sendButton":sendButton]))
+		inputContainerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[sendButton]-5-|", options: .directionMask, metrics: nil, views: ["sendButton":sendButton]))
 		inputContainerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[assetInputView]-0-|", options: .directionLeftToRight, metrics: nil, views: ["assetInputView":assetInputView]))
 		inputContainerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-7.5-[textMessageInput]-0-[sendButton]-2-|", options: .directionLeftToRight, metrics: nil, views: ["sendButton":sendButton,"textMessageInput":messageInputTextView]))
 		
+		inputContainerView.addConstraint(placeholderLabel.leftAnchor.constraint(equalTo: messageInputTextView.leftAnchor, constant: 4))
+		inputContainerView.addConstraint(placeholderLabel.rightAnchor.constraint(equalTo: messageInputTextView.rightAnchor))
+		inputContainerView.addConstraint(placeholderLabel.bottomAnchor.constraint(equalTo: messageInputTextView.bottomAnchor))
+		inputContainerView.addConstraint(placeholderLabel.topAnchor.constraint(equalTo: messageInputTextView.topAnchor))
+
 		let mediaUploadButton = initializeMediaUploadButton()
 		stackView.addArrangedSubview(embeddViewInSpacerView(mediaUploadButton))
 		stackView.addArrangedSubview(inputContainerView)
@@ -371,6 +395,13 @@ extension MIMessageInputView{
 		messageInputTextView.translatesAutoresizingMaskIntoConstraints = false
 		messageInputTextView.delegate = self
 		messageInputTextView.backgroundColor = UIColor.clear
+		messageInputTextView.font = placeholderLabel.font.withSize(16)
+		
+		placeholderLabel.translatesAutoresizingMaskIntoConstraints = false
+		placeholderLabel.textColor = UIColor.lightGray
+		placeholderLabel.text = inputPlaceholder
+		placeholderLabel.font = placeholderLabel.font.withSize(16)
+		
 	}
 	
 	private final func initializeSendButton() {
@@ -397,7 +428,7 @@ extension MIMessageInputView{
 		spacerView.clipsToBounds = true
 		spacerView.addSubview(view)
 
-		spacerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[view]-5-|", options: .directionMask, metrics: nil, views: ["view":view]))
+		spacerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[view]-7-|", options: .directionMask, metrics: nil, views: ["view":view]))
 		spacerView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[view]-0-|", options: .directionLeftToRight, metrics: nil, views: ["view":view]))
 
 		return spacerView

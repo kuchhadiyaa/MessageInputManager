@@ -126,6 +126,12 @@ extension AssetInputCollectionViewCell {
 		return durationString + (String(format: "%d:%02d", minutes, seconds))
 	}
 
+	/// Configure cell for given asset.
+	///
+	/// - Parameters:
+	///   - asset: Asset
+	///   - manager: manager
+	///   - off: should turn of livephoto button 
 	func cofigure(for asset:Any,assetManager manager:MIAssetsManager, isLivePhotoOff off:Bool){
 		cancelImageRequest(manager)
 		if let asset = asset as? PHAsset {
