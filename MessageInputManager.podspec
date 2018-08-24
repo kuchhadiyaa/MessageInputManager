@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
 	#Source and Licence
   	s.homepage         = 'https://github.com/kuchhadiyaa/MessageInputManager'
-  	s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
+  	s.screenshots     = 'https://raw.githubusercontent.com/kuchhadiyaa/MessageInputManager/master/Screenshots/SS1.PNG', 'https://raw.githubusercontent.com/kuchhadiyaa/MessageInputManager/master/Screenshots/SS2.PNG'
   	s.license          = { :type => 'MIT', :file => 'LICENSE' }
   	s.author           = { 'Akshay Kuchhadiya' => 'akshay@atominc.in' }
   	s.source           = { :git => 'https://github.com/kuchhadiyaa/MessageInputManager.git', :tag => s.version }
