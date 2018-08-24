@@ -55,7 +55,7 @@ class AssetInputCollectionViewCell: UICollectionViewCell {
 	}
 
 	/// This will initialize and add all subview and prepare for use.
-	private final func configureCellUI(){
+	fileprivate final func configureCellUI(){
 		contentView.layer.cornerRadius = 15;
 		contentView.clipsToBounds = true;
 
@@ -90,7 +90,7 @@ extension AssetInputCollectionViewCell {
 	/// Update video indicator visiblity along with backdrop view.
 	///
 	/// - Parameter hide: Hide or show
-	func setVideoIndicator(hidden hide: Bool) {
+	fileprivate func setVideoIndicator(hidden hide: Bool) {
 		videoIndicatorImageView.isHidden = hide
 		videoBackdropView.isHidden = hide
 		videoTimeLabel.isHidden = hide
@@ -102,7 +102,7 @@ extension AssetInputCollectionViewCell {
 	/// - Parameters:
 	///   - hide: Should hide or not
 	///   - selected: Should select button or not
-	func setLivePhotoIndicatorViewHidden(_ hide: Bool, selected: Bool) {
+	fileprivate func setLivePhotoIndicatorViewHidden(_ hide: Bool, selected: Bool) {
 		livePhotoButton.isHidden = hide
 		livePhotoButton.isSelected = selected
 	}
@@ -111,7 +111,7 @@ extension AssetInputCollectionViewCell {
 	///
 	/// - Parameter duration: Duration
 	/// - Returns: String representation
-	func convertDuration(toTimeString duration: TimeInterval) -> String {
+	fileprivate func convertDuration(toTimeString duration: TimeInterval) -> String {
 		var duration = duration
 		var durationString = ""
 		let minutes = Int(duration / 60)
@@ -147,7 +147,7 @@ extension AssetInputCollectionViewCell {
 	///   - asset: asset to be used for cell configuration
 	///   - assetsManager: asset manager
 	///   - off: turn of live photo button or on
-	private final func configure(for asset: PHAsset, assetManager assetsManager: MIAssetsManager, isLivePhotoOff off:Bool) {
+	fileprivate final func configure(for asset: PHAsset, assetManager assetsManager: MIAssetsManager, isLivePhotoOff off:Bool) {
 			if asset.mediaType == .video {
 				videoTimeLabel.text = convertDuration(toTimeString: asset.duration)
 				setVideoIndicator(hidden: false)
@@ -166,7 +166,7 @@ extension AssetInputCollectionViewCell {
 	/// - Parameters:
 	///   - asset: asset to be used for cell configuration
 	///   - off: turn of live photo button or on
-	private final func configure(for asset: MIAsset, isLivePhotoOff off: Bool) {
+	fileprivate final func configure(for asset: MIAsset, isLivePhotoOff off: Bool) {
 		assetImageView.image = asset.image
 		if asset.assetType == .video {
 			videoTimeLabel.text = convertDuration(toTimeString: asset.duration)
@@ -180,7 +180,7 @@ extension AssetInputCollectionViewCell {
 	/// This method will cancel any previous image loading request. this will be effective in reusing cell.
 	///
 	/// - Parameter assetsManager: assets manager
-	private final func cancelImageRequest(_ assetsManager: MIAssetsManager) {
+	fileprivate final func cancelImageRequest(_ assetsManager: MIAssetsManager) {
 		assetsManager.cancel(imageRequest: imageRequestID)
 		imageRequestID = 0
 	}
@@ -192,7 +192,7 @@ extension AssetInputCollectionViewCell {
 extension AssetInputCollectionViewCell {
 	
 	/// This method will add image view representing asset thumb.
-	private final func addAssetImageView() {
+	fileprivate final func addAssetImageView() {
 		assetImageView.translatesAutoresizingMaskIntoConstraints = false
 		assetImageView.contentMode = .scaleAspectFill
 		assetImageView.clipsToBounds = true
@@ -202,7 +202,7 @@ extension AssetInputCollectionViewCell {
 	}
 	
 	/// This method will add video indicator view with backdrop view.
-	private final func addVideoIndicatorView() {
+	fileprivate final func addVideoIndicatorView() {
 		videoIndicatorImageView.translatesAutoresizingMaskIntoConstraints = false
 		videoIndicatorImageView.clipsToBounds = true
 		videoIndicatorImageView.contentMode = .scaleAspectFill
@@ -229,7 +229,7 @@ extension AssetInputCollectionViewCell {
 	
 	
 	/// Add remove button
-	private final func addRemoveAssetButton() {
+	fileprivate final func addRemoveAssetButton() {
 		removeAssetButton.translatesAutoresizingMaskIntoConstraints = false
 		removeAssetButton.setImage(UIImage.fromMIBundle(named: "RemoveItem"), for: .normal)
 		removeAssetButton.addTarget(self, action: #selector(removeAssetButtonTouchUpInsde(_:)), for: .touchUpInside)
@@ -241,7 +241,7 @@ extension AssetInputCollectionViewCell {
 	/**
 	Add Live photo button.
 	*/
-	private final func addLivePhotoButton() {
+	fileprivate final func addLivePhotoButton() {
 		livePhotoButton.translatesAutoresizingMaskIntoConstraints = false
 		livePhotoButton.setImage(UIImage.fromMIBundle(named: "Live"), for: .normal)
 		livePhotoButton.setImage(UIImage.fromMIBundle(named: "LifeOff"), for: .selected)

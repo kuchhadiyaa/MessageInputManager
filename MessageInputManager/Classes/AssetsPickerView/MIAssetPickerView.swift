@@ -74,7 +74,7 @@ extension MIAssetPickerView {
 	///
 	/// - Parameter indexPaths: Index path at which to retrive asset.
 	/// - Returns: Assets for given indexPaths
-	private final func getAssets(at indexPaths:[IndexPath]) -> [PHAsset] {
+	fileprivate final func getAssets(at indexPaths:[IndexPath]) -> [PHAsset] {
 		var assets = [PHAsset]()
 		for indexPath in indexPaths {
 			if indexPath.row > 2,let asset = assetsManager.asset(at: indexPath.row - 3) {
@@ -93,7 +93,7 @@ extension MIAssetPickerView {
 	/// Opens image picker for camera or Photolibrary.
 	///
 	/// - Parameter camera: If true opens camera picker else Library.
-	private final func showMessagePicker(forSourceCamera camera: Bool) {
+	fileprivate final func showMessagePicker(forSourceCamera camera: Bool) {
 		let imagePickerVC = UIImagePickerController()
 		imagePickerVC.delegate = self
 		imagePickerVC.allowsEditing = false
@@ -124,7 +124,7 @@ extension MIAssetPickerView {
 	/// Process media in legacy way.
 	///
 	/// - Parameter info: Media dictionary
-	private final func processMedia(with info:[String:Any]){
+	fileprivate final func processMedia(with info:[String:Any]){
 		var info = info
 		//If type movie then get thumb of image and set in dict as origional image key.
 		var assetImage = UIImage()
@@ -340,13 +340,13 @@ extension MIAssetPickerView : UINavigationControllerDelegate, UIImagePickerContr
 extension MIAssetPickerView {
 	
 	/// Initialize UI and setup initial values
-	private final func initiateComponents(){
+	fileprivate final func initiateComponents(){
 		assetsManager.delegate = self
 		initializeAndConfigureViews()
 	}
 	
 	/// Setup subviews
-	private final func initializeAndConfigureViews(){
+	fileprivate final func initializeAndConfigureViews(){
 		autoresizingMask = .flexibleHeight
 		backgroundColor = UIColor.groupTableViewBackground
 		
@@ -354,7 +354,7 @@ extension MIAssetPickerView {
 	}
 	
 	/// Initialize collection view and add as subview.
-	private final func initializeAndConfigureCollection(){
+	fileprivate final func initializeAndConfigureCollection(){
 		let flowLayout = AssetInputFlowLayout()
 		flowLayout.scrollDirection = .horizontal
 		flowLayout.sectionInset = UIEdgeInsetsMake(1, 5, 1, 5)

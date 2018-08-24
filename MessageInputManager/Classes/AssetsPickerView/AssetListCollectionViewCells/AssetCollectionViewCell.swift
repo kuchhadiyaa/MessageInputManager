@@ -49,7 +49,7 @@ class AssetCollectionViewCell: UICollectionViewCell {
 	// MARK: - UI helper methods
 	
 	/// This will initialize and add all subview and prepare for use.
-	private final func configureCellUI(){
+	fileprivate final func configureCellUI(){
 		//Initialize all components
 		addAssetImageView()
 		addVideoIndicatorView()
@@ -60,7 +60,7 @@ class AssetCollectionViewCell: UICollectionViewCell {
 	}
 	
 	/// This method will add image view representing asset thumb.
-	private final func addAssetImageView() {
+	fileprivate final func addAssetImageView() {
 		assetImageView.translatesAutoresizingMaskIntoConstraints = false
 		assetImageView.contentMode = .scaleAspectFill
 		assetImageView.clipsToBounds = true
@@ -70,7 +70,7 @@ class AssetCollectionViewCell: UICollectionViewCell {
 	}
 	
 	/// This method will add video indicator view with backdrop view.
-	func addVideoIndicatorView() {
+	fileprivate func addVideoIndicatorView() {
 		videoIndicatorImageView.translatesAutoresizingMaskIntoConstraints = false
 		videoIndicatorImageView.clipsToBounds = true
 		videoIndicatorImageView.contentMode = .scaleAspectFill
@@ -89,7 +89,7 @@ class AssetCollectionViewCell: UICollectionViewCell {
 	}
 	
 	/// Adds selection indicator image view.
-	func addSelectionIndicatorView() {
+	fileprivate func addSelectionIndicatorView() {
 		selectionImageView.translatesAutoresizingMaskIntoConstraints = false
 		selectionImageView.clipsToBounds = true
 		selectionImageView.contentMode = .scaleAspectFill

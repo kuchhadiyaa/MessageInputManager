@@ -126,7 +126,7 @@ final class MICameraManager {
 		updateZoomFactorForActiveDevice()
 	}
 	
-	private func initializeCaptureDevices() {
+	fileprivate func initializeCaptureDevices() {
 		if #available(iOS 10.0, *) {
 			func enableLowLightBoostIfAvailableForDevice(_ device:AVCaptureDevice){
 				if device.isLowLightBoostSupported {
@@ -186,7 +186,7 @@ final class MICameraManager {
 	}
 	
 	/// This method will add observers for session interuption and subject area change.
-	func addObservers() {
+	fileprivate func addObservers() {
 		NotificationCenter.default.addObserver(self, selector: #selector(sessionWasInterrupted(_:)), name: NSNotification.Name.AVCaptureSessionWasInterrupted, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(sessionInterruptionEnded(_:)), name: NSNotification.Name.AVCaptureSessionInterruptionEnded, object: nil)
 		NotificationCenter.default.addObserver(self, selector: #selector(subjectAreaDidChange(_:)), name: .AVCaptureDeviceSubjectAreaDidChange, object: nil)

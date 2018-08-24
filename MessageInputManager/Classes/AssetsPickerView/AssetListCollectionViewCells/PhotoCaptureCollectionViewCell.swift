@@ -151,7 +151,7 @@ extension PhotoCaptureCollectionViewCell : MICameraManagerDelgate {
 	}
 	
 	/// Helper manage camera switch button visiblity based on capture devices.
-	private final func updateSwitchButtonVisiblity(){
+	fileprivate final func updateSwitchButtonVisiblity(){
 		if cameraController.canSwitchCamera() {
 			cameraSwitchButton.isHidden = false
 		}else{

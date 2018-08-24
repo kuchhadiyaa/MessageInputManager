@@ -53,12 +53,7 @@ public class MIMessageInputView: UIView {
 		initializeComponents()
 	}
 	
-	private final func initializeComponents(){
-		assetPickerView.delegate = self
-		configureView()
-	}
-	
-	public override var intrinsicContentSize: CGSize{
+	override public var intrinsicContentSize: CGSize{
 		return CGSize.zero
 	}
 }
@@ -236,7 +231,7 @@ extension MIMessageInputView: UITextViewDelegate {
 extension MIMessageInputView {
 	
 	/// Update Send button
-	private final func updateSendButton(){
+	fileprivate final func updateSendButton(){
 		if assetsInput.count > 0 || messageInputTextView.text != ""{
 			sendButton.isEnabled = true;
 		}else{
@@ -245,7 +240,7 @@ extension MIMessageInputView {
 	}
 	
 	/// Update asset input visiblity
-	private final func updateAssetInputView(){
+	fileprivate final func updateAssetInputView(){
 		let hideAssetInputView = assetsInput.count == 0
 		if assetInputView.isHidden != hideAssetInputView {
 			func performAnimation(to alpha:CGFloat){
@@ -278,7 +273,7 @@ extension MIMessageInputView {
 	}
 
 	/// Update visiblity of Placeholder label
-	private final func updatePlaceholderLabel(){
+	fileprivate final func updatePlaceholderLabel(){
 		placeholderLabel.isHidden = messageInputTextView.text != ""
 	}
 }
@@ -286,7 +281,13 @@ extension MIMessageInputView {
 // MARK: - UI Helper methods
 
 extension MIMessageInputView{
-	private final func configureView(){
+	
+	fileprivate final func initializeComponents(){
+		assetPickerView.delegate = self
+		configureView()
+	}
+
+	fileprivate final func configureView(){
 		translatesAutoresizingMaskIntoConstraints = false
 		autoresizingMask = [.flexibleWidth,.flexibleHeight]
 		
@@ -307,7 +308,7 @@ extension MIMessageInputView{
 		configureInputView(containerView: mainStackView)
 	}
 	
-	private final func configureInputView(containerView stackView:UIStackView){
+	fileprivate final func configureInputView(containerView stackView:UIStackView){
 		
 		//Create container to wrap both collection and text input.
 		
@@ -349,7 +350,7 @@ extension MIMessageInputView{
 		stackView.addArrangedSubview(inputContainerView)
 	}
 	
-	private final func configureAssetsInputView(){
+	fileprivate final func configureAssetsInputView(){
 		
 		assetInputView.translatesAutoresizingMaskIntoConstraints = false
 		assetInputView.clipsToBounds = true
@@ -391,7 +392,7 @@ extension MIMessageInputView{
 		assetInputView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[assetInputCollectionView]-0-|", options: .directionLeftToRight, metrics: nil, views: ["assetInputCollectionView":assetInputCollectionView]))
 	}
 	
-	private final func initializeMessageInputTextView() {
+	fileprivate final func initializeMessageInputTextView() {
 		messageInputTextView.translatesAutoresizingMaskIntoConstraints = false
 		messageInputTextView.delegate = self
 		messageInputTextView.backgroundColor = UIColor.clear
@@ -404,7 +405,7 @@ extension MIMessageInputView{
 		
 	}
 	
-	private final func initializeSendButton() {
+	fileprivate final func initializeSendButton() {
 		sendButton.translatesAutoresizingMaskIntoConstraints = false
 		sendButton.isEnabled = false
 		sendButton.setImage(UIImage.fromMIBundle(named: "Send"), for: .normal)
@@ -412,7 +413,7 @@ extension MIMessageInputView{
 		sendButton.addTarget(self, action: #selector(sendMessageButtonTouchUpInsde(_:)), for: .touchUpInside)
 		sendButton.addConstraint(sendButton.widthAnchor.constraint(equalToConstant: 30))
 	}
-	private final func initializeMediaUploadButton() -> UIButton{
+	fileprivate final func initializeMediaUploadButton() -> UIButton{
 		assetInputButton.translatesAutoresizingMaskIntoConstraints = false
 		assetInputButton.setImage(UIImage.fromMIBundle(named: "Photo"), for: .selected)
 		assetInputButton.setImage(UIImage.fromMIBundle(named: "PhotoDisabled"), for: .normal)
@@ -422,7 +423,7 @@ extension MIMessageInputView{
 		return assetInputButton
 
 	}
-	private final func embeddViewInSpacerView(_ view:UIView) -> UIView{
+	fileprivate final func embeddViewInSpacerView(_ view:UIView) -> UIView{
 		let spacerView = UIView()
 		spacerView.translatesAutoresizingMaskIntoConstraints = false
 		spacerView.clipsToBounds = true

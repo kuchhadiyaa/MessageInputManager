@@ -33,7 +33,7 @@ final class MIPhotoCaptureProcessor:NSObject{
     ///   - orientation: Orientation of photo
     ///   - completionHandler: Handler will be invoked at capture end.
     func capturePhoto(with captureSettings:AVCapturePhotoSettings,orientation:AVCaptureVideoOrientation,completionHandler:@escaping PhotoCaptureCompletionHandler) {
-        photoOutput.connection(with: AVMediaType.video)?.videoOrientation = orientation
+		photoOutput.connection(with: AVMediaType.video)?.videoOrientation = orientation
         captureCompletionHanlder = completionHandler
         photoOutput.capturePhoto(with: captureSettings, delegate: self)
     }
@@ -55,7 +55,7 @@ final class MIPhotoCaptureProcessor:NSObject{
 @available(iOS 10.0, *)
 extension MIPhotoCaptureProcessor:AVCapturePhotoCaptureDelegate {
 	
-    func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+	func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         guard error == nil else {
             captureCompletionHanlder?(nil,nil,error)
             return

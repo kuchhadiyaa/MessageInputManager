@@ -7,9 +7,10 @@ Pod::Spec.new do |s|
   s.description      = 'MessageInputManager provides Chat input view which allows users to input text message, and media message similar to Apple iMessage app. It Allows users to select images from user\' Camera Roll album and allows to Capture photo using native camera inline.'
 
 	#Version and deployment info
-	s.version          = '1.0.0'
-	s.ios.deployment_target  = '9.0'
-	s.platform     		= :ios, "9.0"
+	s.version                  = '1.0.0'
+	s.ios.deployment_target    = '9.0'
+    s.swift_version            = '4.0'
+	s.platform     		       = :ios, "9.0"
 
 	#Source and Licence
   s.homepage         = 'https://github.com/kuchhadiyaa/MessageInputManager'
