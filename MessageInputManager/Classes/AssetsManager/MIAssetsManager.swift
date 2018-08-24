@@ -127,7 +127,7 @@ extension MIAssetsManager {
 	/// Initialize assets by image manager.
 	fileprivate final func initializeAssets() {
 		registerObserver()
-		imageManager = PHCachingImageManager()
+		
 		authorizationStatus = PHPhotoLibrary.authorizationStatus()
 		authorization({ [weak self] status in
 			self?.authorizationStatus = PHPhotoLibrary.authorizationStatus()

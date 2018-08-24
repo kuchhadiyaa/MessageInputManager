@@ -45,6 +45,8 @@ class PhotoCaptureCollectionViewCell: UICollectionViewCell {
 		addPermissionLabel()
 		addCaptureButton()
 		addCameraSwitchButton()
+		
+		cameraController.configurePreview(view: previewView)
 	}
 	
 	/// This method will add preview view for video rendering.
@@ -122,18 +124,16 @@ extension PhotoCaptureCollectionViewCell {
 
 extension PhotoCaptureCollectionViewCell : MICameraManagerDelgate {
 	func cameraPermissionDidChange(status: AVAuthorizationStatus) {
-		DispatchQueue.main.async { [weak self] in
-			self?.permissionLabel.text = "Application requires access to your camera."
-			switch status {
-			case .authorized:
-				self?.permissionLabel.isHidden = true
-				self?.captureButton.isHidden = false
-				self?.updateSwitchButtonVisiblity()
-			default:
-				self?.permissionLabel.isHidden = false
-				self?.captureButton.isHidden = true
-				self?.cameraSwitchButton.isHidden = true
-			}
+		permissionLabel.text = "Application requires access to your camera."
+		switch status {
+		case .authorized:
+			permissionLabel.isHidden = true
+			captureButton.isHidden = false
+			updateSwitchButtonVisiblity()
+		default:
+			permissionLabel.isHidden = false
+			captureButton.isHidden = true
+			cameraSwitchButton.isHidden = true
 		}
 	}
 	

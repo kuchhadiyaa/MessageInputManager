@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 	s.source_files = 'MessageInputManager/Classes/**/*'
 
 	#Social media links
-  s.social_media_url = 'https://twitter.com/anonymous_akkii'
+  s.social_media_url = 'https://www.twitter.com/anonymous_akkii'
 #s.social_media_url = 'https://in.linkedin.com/in/akshay18'
 
 	s.resource_bundles = {
