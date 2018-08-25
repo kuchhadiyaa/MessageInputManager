@@ -23,9 +23,7 @@ Pod::Spec.new do |s|
 	#Social media links
   	s.social_media_url = 'https://www.twitter.com/anonymous_akkii'
 
-	s.resource_bundles = {
-	 'MessageInputManager' => ['MessageInputManager/Assets/**/*.*']
-	}
+	s.resource = 'Assets/**/*'
 
 	#Framework dependancy
   # s.public_header_files = 'Pod/Classes/**/*.h'
